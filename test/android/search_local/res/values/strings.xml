@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns="http://schemas.android.com/apk/res/android">
+
+<!--
+**************************************************  
+* search_activity_prompt
+**************************************************  
+-->
+<string name="main_activity_prompt">
+This test application has a number of activities
+that test search functionality. Use menu to invoke 
+other test activities dedicated for this test application.
+\n\n
+The menu that is clicked is logged here in the debug area.
+\n\n
+Clicking on the search key, if it is enabled, doesn\'t do
+anything. It calls the onSearchRequested(). you can see this
+in the log file. But no global search will be called.
+</string>
+    
+<!--
+**************************************************  
+* search_activity_prompt
+**************************************************  
+-->
+    <string name="search_activity_prompt">
+This is called a search activity or search results activity. This activity
+is invoked as a result of entering text into the search box
+and choosing search.
+\n\n
+You can retrieve the query string
+from the intent to see what the query is.
+    </string>
+<!--
+**************************************************  
+* local_search_enabled_activity_prompt
+**************************************************  
+-->
+    <string name="local_search_enabled_activity_prompt">
+This is a very simple activity that has indicated through 
+the manifest file that there is a an associated search
+activity. This activity invokes onSearchRequested()
+when it detects a search either through a menu item
+or a button click. 
+Call to onSearchRequested() will result in a local search 
+as opposed to global search.
+\n\n
+You can see the local nature of it by looking at the 
+label of the QSB and also the hint in the QSB. Both
+came from the search metadata.
+\n\n
+There are 2 ways to invoke local search from here.
+\n\n
+1. Click menu to see a search menu item
+2. Or if search key is enabled clicke the search key
+\n\n
+Both ooperations will invoke the local search box.
+Type something into the search box and hit the 
+enter button to go to the search results activity.
+</string>
+<!--
+**************************************************  
+* actionbar_activity_prompt
+**************************************************  
+-->
+<string name="actionbar_activity_prompt">
+This activity demos the actionbar. You will see a search icon
+show up in the action bar. if there is space
+you will see a searchview as well.
+\n\n
+If there is not enough space, it may not present the
+searchview but just the icon. In that case you have to
+capture the menu and invoke search explicitly.
+\n\n
+</string>
+<string name="search_action">LSearch</string>
+<string name="search_label">Local Search Demo</string>
+<string name="search_hint">Local Search Demo Hint</string>
+<!--
+    <string name="app_name">Sample Search Application</string>
+-->
+</resources>
