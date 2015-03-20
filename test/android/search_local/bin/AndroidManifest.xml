@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.androidbook.search.nosearch">
+      
+    <uses-sdk android:minSdkVersion="14" 
+        />
+    
+    <application android:icon="@drawable/robot" 
+        android:label="Test Activity QSB Interaction">
+        
+	<activity android:name=".MainTestActivity"
+                  android:label="QSB1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+    </activity>
+        
+        
+	<activity android:name=".LocalSearchEnabledActivity"
+                  android:label="QSB2">
+	    <meta-data android:name="android.app.default_searchable"
+            android:value=".SearchActivity" />
+    </activity>
+    
+	<activity android:name=".ActionBarSearchActivity"
+                  android:label="QSB3">
+	    <meta-data android:name="android.app.default_searchable"
+            android:value=".SearchActivity" />
+	    
+    </activity>
+    
+	<activity android:name=".SearchActivity"
+                 android:label="QSB4">
+	  <intent-filter>
+	      <action android:name="android.intent.action.SEARCH" />
+	      <category android:name="android.intent.category.DEFAULT" />
+	   </intent-filter>
+	  <meta-data android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
+    </activity>
+/*    
+	<meta-data android:name="android.app.default_searchable"
+            android:value="*" />
+*/	
+	</application>
+</manifest> 
