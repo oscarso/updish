@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">UpDish</string>
+    <string name="men_action_settings">Settings</string>
+    <string name="msg_locmgr">Please enable GPS or WiFi !</string>
+
+    <string name="tit_activity_place_list">NONE</string>
+    <string name="msg_place_list">Where are you ?</string>
+
+    <string name="tit_activity_product_list">NONE</string>
+    <string name="msg_product_list">Press to vote or unvote</string>
+
+    <string name="tit_activity_place_add">NONE</string>
+    <string name="msg_place_add_name">Restaurant name:</string>
+    <string name="msg_place_add_cat">Category:</string>
+    <string name="msg_place_add_country">Representing Country:</string>
+    
+    <string name="tit_activity_product_add">NONE</string>
+    <string name="msg_product_name_add">Dish name:</string>
+    <string name="msg_product_add_itemtype">Item Type:</string>
+    <string name="msg_product_add_country">Representing Country:</string>
+    <string name="msg_product_photo_add">Dish photo:</string>
+    <string name="btn_take_photo">Take Photo</string>
+    <string name="btn_get_photo">Gallery</string>
+
+    <string name="btn_new">New</string>
+    <string name="btn_back">Back</string>
+    <string name="btn_next">Next</string>
+
+    <color name="white">#FFFFFF</color>
+
+</resources>

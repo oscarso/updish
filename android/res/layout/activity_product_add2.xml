@@ -1,0 +1,81 @@
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:context="co.oscarsoft.updish.ProductAddActivity2"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:orientation="vertical"
+	android:background="@color/white" >
+
+    <LinearLayout
+     android:background="@color/white"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+    <ImageView
+     android:layout_width="40dp"
+     android:layout_height="40dp"
+     android:layout_alignParentTop="true"
+     android:layout_centerHorizontal="true"
+     android:src="@drawable/up_512x512" />
+    </LinearLayout>
+
+	<TextView
+	 android:layout_width="wrap_content"
+	 android:layout_height="wrap_content"
+	 android:text="@string/msg_product_photo_add"
+	 android:textColor="#000000"
+	 android:textSize="20dp"
+	 android:layout_marginLeft="5dp"
+	 android:layout_marginTop="20dp"
+	 android:layout_marginBottom="20dp" />
+
+    <LinearLayout
+     android:background="@color/white"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+    <Button
+     android:id="@+id/btnTakePhoto"
+     android:layout_width="wrap_content"
+     android:layout_height="fill_parent"
+     android:text="@string/btn_take_photo"/>
+    <Button
+     android:id="@+id/btnGetPhoto"
+     android:layout_width="wrap_content"
+     android:layout_height="fill_parent"
+     android:text="@string/btn_get_photo"/>
+    </LinearLayout>
+    
+    <ImageView
+     android:id="@+id/ivwProductImage"
+     android:layout_width="250dp"
+     android:layout_height="250dp"
+     android:layout_alignParentTop="true"
+     android:layout_centerHorizontal="true"/>
+
+    <LinearLayout
+     android:background="@color/white"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+ 
+    <Button
+     android:id="@+id/btnProductAdd_Back"
+     android:layout_width="wrap_content"
+     android:layout_height="fill_parent"
+     android:layout_alignParentRight="true"
+     android:text="@string/btn_back"
+     android:layout_marginLeft="5dp"
+     android:layout_marginRight="200dp" />
+
+    <Button
+     android:id="@+id/btnProductAdd_Next"
+     android:layout_width="wrap_content"
+     android:layout_height="fill_parent"
+     android:layout_alignParentRight="true"
+     android:text="@string/btn_next"
+     android:layout_marginRight="5dp" />
+    </LinearLayout>
+
+</LinearLayout>
