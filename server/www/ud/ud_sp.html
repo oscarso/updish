@@ -1,0 +1,503 @@
+<pre>
+-- MySQL dump 10.13  Distrib 5.5.40, for Linux (x86_64)
+--
+-- Host: localhost    Database: osoft_ud
+-- ------------------------------------------------------
+-- Server version	5.5.40-cll
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Dumping routines for database 'osoft_ud'
+--
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_get_dist`(
+IN  lat1 float, 
+IN  lon1 float, 
+IN  lat2 float, 
+IN  lon2 float,
+OUT dist float
+)
+BEGIN
+   declare R int DEFAULT 3958.76;
+   declare phi1 float;
+   declare phi2 float;
+   declare d_phi float;
+   declare d_lambda float;
+   declare a float;
+   declare c float;
+   declare d float;
+   set phi1 = radians(lat1);
+   set phi2 = radians(lat2);
+   set d_phi = radians(lat2-lat1);
+   set d_lambda = radians(lon2-lon1);
+   set a = sin(d_phi/2) * sin(d_phi/2) +
+         cos(phi1) * cos(phi2) *
+         sin(d_lambda/2) * sin(d_lambda/2);
+   set c = 2 * atan2(sqrt(a), sqrt(1-a));
+   set dist = R * c;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_get_place_in_r`(
+IN  u_lat float,
+IN  u_lng float,
+IN  u_r   float
+)
+BEGIN
+declare lng1 float;
+declare lng2 float;
+declare lat1 float;
+declare lat2 float;
+
+
+set lng1 = u_lng - u_r/abs(cos(radians(u_lat))*69);
+set lng2 = u_lng + u_r/abs(cos(radians(u_lat))*69);
+set lat1 = u_lat - (u_r/69);
+set lat2 = u_lat + (u_r/69);
+
+
+DROP TABLE IF EXISTS `tmp_place`;
+CREATE TEMPORARY TABLE `tmp_place`
+(
+   gplace_id varchar(64),
+   name varchar(256),
+   dist float,
+   photo_path varchar(1024),
+   PRIMARY KEY (gplace_id)
+);
+
+
+INSERT INTO
+ tmp_place
+(
+ gplace_id,
+ name,
+ dist
+)
+SELECT
+ gplace_id,
+ name,
+  7912 * ASIN(SQRT(POWER(SIN((u_lat - place.lat) * pi()/180 / 2), 2) +
+  COS(u_lat * pi()/180) * COS(place.lat * pi()/180) *
+  POWER(SIN((u_lng - place.lng) * pi()/180 / 2), 2) )) AS
+ dist 
+ FROM place
+WHERE
+lng BETWEEN lng1 AND lng2
+AND
+lat BETWEEN lat1 AND lat2 
+HAVING dist < u_r
+ORDER BY dist
+LIMIT 30;
+
+
+
+
+SELECT * FROM tmp_place;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_get_prodid_by_hashid`(
+IN  in_id_hash varchar(64)
+)
+BEGIN
+
+SELECT aid 
+FROM prodsrv
+WHERE id_hash = in_id_hash;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_get_vote`(
+in in_gplace_id varchar(64), 
+in in_user_id varchar(64)
+)
+BEGIN
+
+
+DROP TABLE IF EXISTS `tmp_vote`;
+CREATE TEMPORARY TABLE `tmp_vote`
+(
+  prod_id    bigint(20),
+  gplace_id  varchar(64),
+  uname_en   varchar(256),
+  iname_en   varchar(256),
+  vote       bigint(20) unsigned,
+  photo_path varchar(1024),
+  user_voted varchar(1),
+  PRIMARY KEY (prod_id)
+);
+
+
+INSERT INTO
+ tmp_vote
+(
+ prod_id,
+ gplace_id,
+ uname_en,
+ iname_en
+)
+SELECT
+ prodsrv.aid,
+ place_prodsrv.gplace_id,
+ prodsrv.uname_en,
+ prodsrv.iname_en
+FROM
+ place_prodsrv JOIN prodsrv
+ ON place_prodsrv.prod_id = prodsrv.aid
+WHERE
+ place_prodsrv.gplace_id = in_gplace_id;
+
+
+UPDATE
+ tmp_vote
+SET photo_path = (
+ SELECT photo_path
+ FROM place_photo
+ WHERE tmp_vote.prod_id = place_photo.prod_id
+);
+
+UPDATE
+ tmp_vote
+SET vote = (
+ SELECT count(*)
+ FROM vote
+ WHERE
+  vote.gplace_id = in_gplace_id
+  AND tmp_vote.prod_id = vote.prod_id
+);
+
+
+UPDATE
+ tmp_vote
+SET user_voted = (
+ SELECT count(*)
+ FROM vote
+ WHERE
+  vote.gplace_id = in_gplace_id
+  AND tmp_vote.prod_id = vote.prod_id
+  AND vote.user_id = in_user_id
+);
+
+
+SELECT * FROM tmp_vote;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_is_user_valid`(
+IN in_user_id   varchar(64),
+IN in_level     int
+)
+BEGIN
+
+ SELECT COUNT(*) AS c
+ FROM   user 
+ WHERE
+   id = in_user_id 
+   AND
+   level = in_level;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_place`(
+IN in_gplace_id varchar(64),
+IN in_name      varchar(512),
+IN in_lat       float,
+IN in_lng       float
+)
+BEGIN
+DECLARE _tsc DATETIME;
+
+SET _tsc = CURRENT_TIMESTAMP();
+
+INSERT INTO
+place (gplace_id, name, lat, lng, ts_created)
+VALUES (in_gplace_id, in_name, in_lat, in_lng, _tsc)
+ON DUPLICATE KEY UPDATE
+name=VALUES(name),
+lat=VALUES(lat),
+lng=VALUES(lng);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_place_photo`(
+IN in_gplace_id varchar(64),
+IN in_photo_path varchar(1024),
+IN in_prod_id bigint(20)
+)
+BEGIN
+
+INSERT INTO place_photo
+(gplace_id, photo_path, prod_id)
+VALUES (in_gplace_id, in_photo_path, in_prod_id);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_place_prodsrv`(
+IN in_gplace_id varchar(64),
+IN in_prod_id bigint(20)
+)
+BEGIN
+
+INSERT INTO place_prodsrv
+(gplace_id, prod_id)
+VALUES (in_gplace_id, in_prod_id);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_place_type`(
+in in_gplace_id varchar(64),
+in in_gtype_id  varchar(64)
+)
+BEGIN
+DECLARE _tsc DATETIME;
+
+SET _tsc = CURRENT_TIMESTAMP();
+
+INSERT INTO
+place_type (gplace_id, gtype_id)
+VALUES (in_gplace_id, in_gtype_id);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_prodsrv`(
+IN in_gtype_id varchar(64),
+IN in_item_type varchar(64),
+IN in_country_id varchar(2),
+IN in_uname_en varchar(256),
+IN in_iname_en varchar(256),
+IN in_id_hash varchar(64)
+)
+BEGIN
+
+INSERT INTO prodsrv
+(gtype_id, item_type, country_id, uname_en, iname_en, id_hash)
+VALUES (in_gtype_id, in_item_type, in_country_id, in_uname_en, in_iname_en, in_id_hash);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_user`(
+IN in_user_id   varchar(64),
+IN in_level     int
+)
+BEGIN
+ DECLARE _tsc DATETIME;
+ SET _tsc = CURRENT_TIMESTAMP();
+
+ INSERT INTO user 
+ (id, level, ts_created)
+ VALUES
+ (in_user_id, in_level, _tsc);
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8 */ ;
+/*!50003 SET character_set_results = utf8 */ ;
+/*!50003 SET collation_connection  = utf8_general_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = '' */ ;
+DELIMITER ;;
+CREATE DEFINER=`osoft_udadmin`@`localhost` PROCEDURE `sp_set_vote`(
+IN in_gplace_id varchar(64),
+IN in_prod_id   bigint(20),
+IN in_user_id   varchar(64)
+)
+BEGIN
+DECLARE has_voted INT DEFAULT 0;
+
+SET has_voted =
+(SELECT
+ COUNT(*)
+FROM
+ vote
+WHERE
+ gplace_id = in_gplace_id
+AND
+ prod_id = in_prod_id
+AND
+ in_user_id = user_id
+);
+
+IF has_voted > 0 THEN
+
+ DELETE FROM vote
+ WHERE
+ gplace_id = in_gplace_id
+ AND
+ prod_id = in_prod_id
+ AND
+ in_user_id = user_id;
+
+ELSE
+
+ INSERT INTO vote
+ (gplace_id, prod_id, user_id)
+ VALUES
+ (in_gplace_id, in_prod_id, in_user_id);
+
+END IF;
+
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-01-11 21:43:35
+</pre>
