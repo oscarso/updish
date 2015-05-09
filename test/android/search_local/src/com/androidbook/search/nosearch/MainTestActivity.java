@@ -37,22 +37,6 @@ public class MainTestActivity extends Activity
     	appendMenuItemText(item);
 		this.invokeLocalSearchActivity();
 		return true;
-    	/*if (item.getItemId() == R.id.mid_local_search)
-    	{
-    		this.invokeLocalSearchActivity();
-    		return true;
-    	}
-    	if (item.getItemId() == R.id.menu_clear)
-    	{
-    		this.emptyText();
-    		return true;
-    	}
-    	if (item.getItemId() == R.id.mid_actionbar_search)
-    	{
-    		this.invokeActionBarSearchActivity();
-    		return true;
-    	}
-    	return super.onOptionsItemSelected(item);*/
     }
     
     private TextView getTextView()
@@ -66,19 +50,16 @@ public class MainTestActivity extends Activity
        TextView tv = getTextView(); 
        tv.setText(tv.getText() + "\n" + title);
     }
+
     private void emptyText()
     {
           TextView tv = getTextView();
           tv.setText("");
     }
+
     private void invokeLocalSearchActivity()
     {
 		Intent intent = new Intent(this,LocalSearchEnabledActivity.class);
-		startActivity(intent);
-    }
-    private void invokeActionBarSearchActivity()
-    {
-		Intent intent = new Intent(this,ActionBarSearchActivity.class);
 		startActivity(intent);
     }
 
