@@ -1,0 +1,1 @@
+INDEX VERSION 1.126+/Users/oscarso/Documents/OscarSoft/updish/.metadata/.plugins/org.eclipse.jdt.core
