@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="co.oscarsoft.local_search2.SearchInvokerActivity" >
+
+    <!-- This group uses the default category. -->
+    <group android:id="@+id/menuGroup_Main">
+        <item android:id="@+id/mid_si_search"
+            android:title="Search" />
+    </group>
+
+</menu>
