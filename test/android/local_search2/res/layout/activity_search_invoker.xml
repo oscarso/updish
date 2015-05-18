@@ -12,7 +12,7 @@
 	    android:id="@+id/text1"
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content" 
-        android:text="@string/local_search_enabled_activity_prompt"
+        android:text="@string/title_activity_search_invoker"
     />
 
 </RelativeLayout>

@@ -30,7 +30,7 @@ public class SearchInvokerActivity extends Activity {
 	
 	@Override
 	public boolean onSearchRequested() {
-		this.startSearch("coffee", true, null, false);
+		this.startSearch("", true, null, false);
 		return true;
 	}
 }

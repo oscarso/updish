@@ -2,10 +2,8 @@
 <resources>
 
     <string name="app_name">local_search2</string>
-    <string name="search_activity_prompt">search_activity_prompt</string>
     <string name="title_activity_search_invoker">SearchInvokerActivity</string>
     <string name="title_activity_search">SearchActivity</string>
-    <string name="local_search_enabled_activity_prompt">local_search_enabled_activity_prompt</string>
     <string name="search_label">search_label</string>
     <string name="search_hint">search_hint</string>
 

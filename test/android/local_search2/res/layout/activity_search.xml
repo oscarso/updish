@@ -8,6 +8,6 @@
 	android:id="@+id/text1"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="@string/search_activity_prompt"
+    android:text="@string/title_activity_search"
     />
 </LinearLayout>
