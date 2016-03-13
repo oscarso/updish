@@ -1,5 +1,6 @@
 package co.oscarsoft.updish;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                //Intent i = new Intent(MainActivity.this, PlaceListActivity.class);
-                //startActivity(i);
+                Intent i = new Intent(MainActivity.this, PlaceListActivity.class);
+                startActivity(i);
                 // close this activity
                 finish();
             }
