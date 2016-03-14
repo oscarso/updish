@@ -26,6 +26,10 @@
         <activity
             android:name=".PlaceListActivity"
             android:label="@string/title_activity_place_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ADavisLocationServiceActivity"
+            android:label="@string/title_activity_adavis_location_service"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

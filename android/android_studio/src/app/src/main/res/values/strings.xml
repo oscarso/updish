@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <color name="white">#FFFFFF</color>
     <string name="title_activity_place_list">PlaceListActivity</string>
+    <string name="title_activity_adavis_location_service">ADavisLocationServiceActivity</string>
 </resources>
